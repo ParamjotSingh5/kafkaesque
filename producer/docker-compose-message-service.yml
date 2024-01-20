@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    ports:
+      - 2181:2181
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181 # is the port on which Zookeeper listens for client connections
+      ZOOKEEPER_TICK_TIME: 2000 # is the length of a single tick, which is the basic time unit used by ZooKeeper, as measured in milliseconds
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+    container_name: kafka
+    environment:
+      KAFKA_BROKER_ID: 1 # is the ID of the broker. This must be set to a unique integer for each broker.
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181 # is the ZooKeeper hostname followed by the port at which ZooKeeper listens for client connections. You may also specify multiple hosts in the form host1:port1,host2:port2,host3:port3.
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092 # is the list of listeners, and their resolvable hostnames/IP addresses. The valid formats are PLAINTEXT://host.name:port, SSL://host.name:port and SASL_SSL://host.name:port. You may also specify multiple listeners in the form LISTENER_NAME://host.name1:port1,LISTENER_NAME://host.name2:port2.
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT # is the protocol to listener mapping. This configuration defines the security protocols to use for each listener. For example, to specify a SASL_SSL listener named "CLIENT" and a PLAINTEXT listener named "GATEWAY" you would use the configuration: CLIENT:SASL_SSL,GATEWAY:PLAINTEXT.
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT # is the name of listener used for communication between brokers. It will be used as the value for inter.broker.listener.name when it is not configured.
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  message_producer_service:
+    build:
+      context: . # is the path to the directory containing the Dockerfile for the service.
+      dockerfile: Dockerfile
+    container_name: message_producer_container
+    environment:
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092 # is the address of the Kafka cluster used by the application to send messages.
+    ports:
+      - 8082:8082
+    depends_on:
+      - kafka
