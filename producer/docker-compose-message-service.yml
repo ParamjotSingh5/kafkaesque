@@ -34,3 +34,14 @@ services:
       - 8082:8082
     depends_on:
       - kafka
+  message_consumer_service:
+    build: 
+      context: .\..\consumer\
+      dockerfile: Dockerfile
+    container_name: message_consumer_container
+    environment:
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
+    ports:
+      - "8081:8081"
+    depends_on:
+      - kafka
