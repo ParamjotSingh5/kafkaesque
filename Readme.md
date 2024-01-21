@@ -1,16 +1,16 @@
-**# Kafkaesque**
+# Kafkaesque
 
-**## Unidirectional Communication with Kafka for Loose Coupling**
+## Unidirectional Communication with Kafka for Loose Coupling
 
-**Kafkaesque is a learning project that demonstrates how to implement unidirectional (producer-to-consumer) active communication using Kafka. It's designed for software developers who want to get hands-on experience with Kafka, Spring, and Docker.**
+Kafkaesque is a learning project that demonstrates how to implement unidirectional (producer-to-consumer) active communication using Kafka. It's designed for software developers who want to get hands-on experience with Kafka, Spring, and Docker.
 
-**## Key Features**
+## Key Features
 
 * Separate producer and consumer services, enabling loose coupling
 * Data safety within the Kafka cluster, even if the producer service goes down
 * Non-polling communication for efficient data transfer
 
-**## Technologies Used**
+## Technologies Used
 
 * Java
 * Spring
@@ -20,7 +20,7 @@
 * Docker-compose
 * Gradle
 
-**## Installation**
+## Installation
 
 1. Clone the repository:
    ```bash
@@ -38,9 +38,9 @@
      - Build JARs for both consumer and producer applications
      - Initiate Docker-compose to spin up required containers and services
 
-**## Usage**
+## Usage
 
-1. **Send a Message to Kafka:**
+1. Send a Message to Kafka:
    - Create an HTTP POST request with the following details:
      - URL: `http://localhost:8082/kafka/producer/message`
      - Content-Type: `application/json`
@@ -52,7 +52,7 @@
        ```
    - You can use tools like Postman or curl to send the request.
 
-2. **View Consumer Logs:**
+2. View Consumer Logs:
    - Run the following command to view the consumer container's logs:
      ```bash
      docker logs -f message_consumer_container
